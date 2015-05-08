@@ -82,7 +82,7 @@ else
     exit 1
 fi
 # Check the CONTAINER ID
-CONTAINER_ID=`docker ps -l -q`
+CONTAINER_ID=`sudo docker ps -l -q`
 
 # Commit it
 sudo docker commit $CONTAINER_ID meta-debian:1

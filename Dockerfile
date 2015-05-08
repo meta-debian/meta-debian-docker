@@ -35,6 +35,10 @@ RUN apt-get -y install git git-core git-daemon-run
 # RUN apt-get install make xsltproc docbook-utils fop dblatex xmlto
 # RUN apt-get install autoconf automake libtool libglib2.0-dev
 
+# Setup git-daemon
+RUN sed -i -e"s/--base-path=\/var\/lib \/var\/lib\/git/--export-all --base-path=\/home\/$DEFAULT_USERNAME\/repositories \/home\/$DEFAULT_USERNAME\/repositories/g" \
+    /etc/sv/git-daemon/run
+
 # Add $USERNAME to sudoers file
 RUN echo "$DEFAULT_USERNAME ALL=(ALL:ALL) ALL" >> \
          /etc/sudoers.d/$DEFAULT_USERNAME
