@@ -70,7 +70,9 @@ fi # FLAG_DOCKER_INSTALL
 
 # Check docker installation
 if [ ! `which docker` ]; then
-    echo "ERROR: Please install docker first!"
+    echo "ERROR: Please install Docker."
+    echo "       To install Docker, you can type as the follows:"
+    echo "         ./make-docker-image.sh -i"
     exit 1
 fi
 
@@ -82,7 +84,7 @@ else
     exit 1
 fi
 # Check the CONTAINER ID
-CONTAINER_ID=`sudo docker ps -l -q`
+# CONTAINER_ID=`sudo docker ps -l -q`
 
 # Commit it
-sudo docker commit $CONTAINER_ID meta-debian:1
+# sudo docker commit $CONTAINER_ID meta-debian:1

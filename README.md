@@ -6,11 +6,11 @@ Dockerfile to create a build environment for meta-debian.
 Setup
 -----
 
-- Creating a docker image
+- Create a docker image
 
-    ./make-docker-image.sh`
+    ./make-docker-image.sh
 
-- Running the image
+- Run the image
 
-    sudo docker run -i -t meta-debian:1 /bin/bash`
+    sudo docker run -i -t meta-debian:1 /bin/bash
 
