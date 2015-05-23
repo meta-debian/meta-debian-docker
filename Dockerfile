@@ -32,6 +32,7 @@ RUN apt-get -y install sudo man lv vim-tiny screen
 RUN apt-get -y install gcc-multilib build-essential chrpath python cpio
 RUN apt-get -y install gawk wget diffstat unzip texinfo
 RUN apt-get -y install git git-core git-daemon-run
+RUN apt-get -y install openssh-server
 # RUN apt-get install make xsltproc docbook-utils fop dblatex xmlto
 # RUN apt-get install autoconf automake libtool libglib2.0-dev
 
@@ -44,6 +45,7 @@ RUN echo "$DEFAULT_USERNAME ALL=(ALL:ALL) ALL" >> \
          /etc/sudoers.d/$DEFAULT_USERNAME
 
 RUN chown -R $DEFAULT_USERNAME:users /home/$DEFAULT_USERNAME
+RUN mkdir -p /var/run/sshd
 USER $DEFAULT_USERNAME
 WORKDIR /home/$DEFAULT_USERNAME
 RUN mkdir -p /home/$DEFAULT_USERNAME/repo-list
