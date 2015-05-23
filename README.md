@@ -12,5 +12,7 @@ Setup
 
 - Run the image
 
-    sudo docker run -i -t meta-debian:1 /bin/bash
+    sudo docker run -d -p 10022:22 meta-debian:1 /usr/sbin/sshd -D
+then
+    ssh -p 10022 debian@localhost
 
