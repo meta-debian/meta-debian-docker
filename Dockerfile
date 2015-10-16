@@ -57,7 +57,7 @@ RUN cp ../repo-lists/src-jessie_meta-debian_tiny-minimal.txt \
 RUN ./pull-repos.sh -c ../config.sh \
     -l /home/$DEFAULT_USERNAME/repo-list/repo-meta-debian_tiny-minimal.txt 
 
-EXPOSE 9148
+EXPOSE 9418
 
 USER root
 # ENTRYPOINT 
