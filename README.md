@@ -9,16 +9,19 @@ instead of git repositries in https://github.com/ystk/.
 Create a docker image
 ---------------------
 
+Create a docker iamge by running below command.
+
+    $ ./make-docker-image.sh
+
 If you use proxy server for making this docker image,  
 you need to set HTTP_PROXY and HTTPS_PROXY in make-docker-image.sh.  
 And don't forget proxy setting of docker command in your machine.  
 
-    $ ./make-docker-image.sh
 
 Run git daemon
 --------------
 
-Run git daemon with docker image.
+Run git daemon with this docker image.
  
     $ sudo docker run -d -p 10022:22 meta-debian:1 /etc/sv/git-daemon/run -D
 
