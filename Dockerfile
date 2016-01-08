@@ -24,6 +24,8 @@ RUN echo "deb $DEBIAN_MIRROR jessie main contrib" > /etc/apt/sources.list
 RUN echo "deb $DEBIAN_MIRROR jessie-updates main contrib" >> \
          /etc/apt/sources.list
 
+RUN bash -c 'if test -n "$HTTP_PROXY" ; then echo "Acquire::http::Proxy \"$HTTP_PROXY\";"; fi'
+RUN bash -c 'if test -n "$HTTP_PROXY" ; then echo "Acquire::http::Proxy \"$HTTP_PROXY\";" >> /etc/apt/apt.conf; fi'
 RUN apt-get update
 RUN apt-get -y install apt-utils
 RUN apt-get -y upgrade
@@ -49,6 +51,8 @@ RUN mkdir -p /var/run/sshd
 USER $DEFAULT_USERNAME
 WORKDIR /home/$DEFAULT_USERNAME
 RUN mkdir -p /home/$DEFAULT_USERNAME/repo-list
+RUN bash -c 'if test -n "$HTTP_PROXY" ; then git config --global http.proxy "$HTTP_PROXY"; fi'
+RUN bash -c 'if test -n "$HTTPS_PROXY" ; then git config --global https.proxy "$HTTP_PROXY"; fi'
 RUN git clone https://github.com/ystk/meta-debian-scripts.git
 WORKDIR /home/$DEFAULT_USERNAME/meta-debian-scripts/setup-local-gitrepo
 RUN sed -i -e"s/\/debian\//\/$DEFAULT_USERNAME\//g" ../config.sh

@@ -2,6 +2,8 @@
 
 # Config
 FLAG_DOCKER_INSTALL=0
+HTTP_PROXY=""
+HTTPS_PROXY=""
 
 usage() {
     echo "Usage: $0 [-i] [-h]"
@@ -78,7 +80,7 @@ fi
 
 # Build a docker container
 if [ -f Dockerfile ]; then
-    sudo docker build -t meta-debian:1 .
+    sudo docker build --build-arg HTTP_PROXY=$HTTP_PROXY --build-arg HTTPS_PROXY=$HTTPS_PROXY -t meta-debian:1 . 
 else
     echo "ERROR: Dockerfile does not exist"
     exit 1
