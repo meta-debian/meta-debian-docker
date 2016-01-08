@@ -35,6 +35,7 @@ RUN apt-get -y install gcc-multilib build-essential chrpath python cpio
 RUN apt-get -y install gawk wget diffstat unzip texinfo
 RUN apt-get -y install git git-core git-daemon-run
 RUN apt-get -y install openssh-server
+RUN apt-get -y install jq curl
 # RUN apt-get install make xsltproc docbook-utils fop dblatex xmlto
 # RUN apt-get install autoconf automake libtool libglib2.0-dev
 
@@ -54,12 +55,14 @@ RUN mkdir -p /home/$DEFAULT_USERNAME/repo-list
 RUN bash -c 'if test -n "$HTTP_PROXY" ; then git config --global http.proxy "$HTTP_PROXY"; fi'
 RUN bash -c 'if test -n "$HTTPS_PROXY" ; then git config --global https.proxy "$HTTP_PROXY"; fi'
 RUN git clone https://github.com/ystk/meta-debian-scripts.git
+WORKDIR /home/$DEFAULT_USERNAME/meta-debian-scripts/repo-lists
+RUN ./generate_src-jessie_meta-debian_all.sh
 WORKDIR /home/$DEFAULT_USERNAME/meta-debian-scripts/setup-local-gitrepo
 RUN sed -i -e"s/\/debian\//\/$DEFAULT_USERNAME\//g" ../config.sh
-RUN cp ../repo-lists/src-jessie_meta-debian_tiny-minimal.txt \
-       /home/$DEFAULT_USERNAME/repo-list/repo-meta-debian_tiny-minimal.txt
+RUN cp ../repo-lists/src-jessie_meta-debian_all.txt \
+       /home/$DEFAULT_USERNAME/repo-list/repo-meta-debian_all.txt
 RUN ./pull-repos.sh -c ../config.sh \
-    -l /home/$DEFAULT_USERNAME/repo-list/repo-meta-debian_tiny-minimal.txt 
+    -l /home/$DEFAULT_USERNAME/repo-list/repo-meta-debian_all.txt 
 
 EXPOSE 9418
 
