@@ -66,6 +66,7 @@ Update docker image
 -------------------
 
 After you created docker image at once, git repositroies may be updated.
+
 In that case, please update git repositories in docker image by runnning some commands manually.
 
 Run sshd in docker, 
@@ -95,7 +96,7 @@ Exit and save current container.
 	$ sudo docker ps -a
 	$ sudo docker commit <#container id> meta-debian:<#new tag>
 
-#new tag is any number you like.
+<#new tag> is any number you like.
 
 Finally, you run git daemon with the latest docker image.
 
