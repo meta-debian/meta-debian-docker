@@ -1,0 +1,33 @@
+#
+# Build git-daemon server for meta-debian build environment
+#
+FROM meta-debian:1
+MAINTAINER KOBAYASHI Yoshitake
+
+# Please change the follows
+ENV DEFAULT_USERNAME debian
+ENV DEFAULT_PASSWORD debian
+ENV GIT_REPO         /home/$USERNAME/repositories
+ENV DEBIAN_MIRROR    http://ftp.jp.debian.org/debian/
+
+# Might be do not need to edit from here
+ENV DEBIAN_FRONTEND noninteractive
+
+USER $DEFAULT_USERNAME
+
+# Update scripts
+WORKDIR /home/$DEFAULT_USERNAME/meta-debian-scripts
+RUN git pull
+
+# Cretae new list
+WORKDIR /home/$DEFAULT_USERNAME/meta-debian-scripts/repo-lists
+RUN ./generate_src-jessie_meta-debian_all.sh
+RUN cp src-jessie_meta-debian_all.txt /home/$DEFAULT_USERNAME/repo-list/repo-meta-debian_all.txt
+
+# Update git repositories
+WORKDIR /home/$DEFAULT_USERNAME/meta-debian-scripts/setup-local-gitrepo
+RUN ./pull-repos.sh -c ../config.sh -l /home/$DEFAULT_USERNAME/repo-list/repo-meta-debian_all.txt 
+
+EXPOSE 9418
+
+USER root

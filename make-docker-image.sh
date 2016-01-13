@@ -2,23 +2,39 @@
 
 # Config
 FLAG_DOCKER_INSTALL=0
+FLAG_UPDATE=0
 HTTP_PROXY=""
 HTTPS_PROXY=""
 
 usage() {
-    echo "Usage: $0 [-i] [-h]"
+    echo "Usage: $0 [-i] [-u] [-h]"
     echo "       i: Install Docker"
+    echo "       u: Update Docker image"
     echo "       h: Ptint help message"
     exit 0
 }
 
+get_latest_tag() {
+    local TAG=`sudo docker images | grep meta-debian | sed 's/[\t ]\+/\t/g' | cut -f2 | head -1 | tail -1`
+	return $TAG
+}
+
+abort() {
+	echo "ERROR: $@" 1>&2
+	exit 1
+}
+
 # Check options
-while getopts "i" OPT
+while getopts "iu" OPT
 do
     case $OPT in
-        i)
+	i)
             echo "INFO    : Installing Docker" 
             FLAG_DOCKER_INSTALL=1
+            ;;
+	u)
+            echo "INFO    : Updating Docker image" 
+            FLAG_UPDATE=1
             ;;
 	h)
 	    usage
@@ -78,9 +94,33 @@ if [ ! `which docker` ]; then
     exit 1
 fi
 
+# Update currrent meta-debian docker image
+if [ $FLAG_UPDATE -ne 0 ]; then
+    if [ ! -f Dockerfile-update ]; then
+        echo "ERROR: Dockerfile-update does not exist"
+        exit 1
+    fi
+	get_latest_tag
+	LATEST_TAG=$?
+	NEW_TAG=`expr $LATEST_TAG + 1`
+    if [ $LATEST_TAG -le 0 ]; then
+        echo "ERROR: Latest tag of docker image cannot found"
+		exit 1
+	else
+	    # Update FROM section in Dockerfile-update with LATEST_TAG
+    	sed -i -e "s/FROM meta-debian:.*/FROM meta-debian:$LATEST_TAG/g" ./Dockerfile-update
+        sudo docker build --build-arg HTTP_PROXY=$HTTP_PROXY --build-arg HTTPS_PROXY=$HTTPS_PROXY \
+                          -t meta-debian:$NEW_TAG -f Dockerfile-update . || abort "ERROR: Cannot update docker image"
+		echo "INFO: New tag is meta-debian:$NEW_TAG"
+        exit 0
+    fi
+fi
+
 # Build a docker container
 if [ -f Dockerfile ]; then
-    sudo docker build --build-arg HTTP_PROXY=$HTTP_PROXY --build-arg HTTPS_PROXY=$HTTPS_PROXY -t meta-debian:1 . 
+    sudo docker build --build-arg HTTP_PROXY=$HTTP_PROXY --build-arg HTTPS_PROXY=$HTTPS_PROXY -t meta-debian:1 . \
+	                  || abort "ERROR: Cannot create docker image"
+	exit 0
 else
     echo "ERROR: Dockerfile does not exist"
     exit 1
