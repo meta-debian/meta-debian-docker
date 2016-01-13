@@ -100,18 +100,18 @@ if [ $FLAG_UPDATE -ne 0 ]; then
         echo "ERROR: Dockerfile-update does not exist"
         exit 1
     fi
-	get_latest_tag
-	LATEST_TAG=$?
-	NEW_TAG=`expr $LATEST_TAG + 1`
+    get_latest_tag
+    LATEST_TAG=$?
+    NEW_TAG=`expr $LATEST_TAG + 1`
     if [ $LATEST_TAG -le 0 ]; then
         echo "ERROR: Latest tag of docker image cannot found"
-		exit 1
+        exit 1
 	else
 	    # Update FROM section in Dockerfile-update with LATEST_TAG
     	sed -i -e "s/FROM meta-debian:.*/FROM meta-debian:$LATEST_TAG/g" ./Dockerfile-update
         sudo docker build --build-arg HTTP_PROXY=$HTTP_PROXY --build-arg HTTPS_PROXY=$HTTPS_PROXY \
                           -t meta-debian:$NEW_TAG -f Dockerfile-update . || abort "ERROR: Cannot update docker image"
-		echo "INFO: New tag is meta-debian:$NEW_TAG"
+        echo "INFO: New tag is meta-debian:$NEW_TAG"
         exit 0
     fi
 fi
@@ -119,8 +119,8 @@ fi
 # Build a docker container
 if [ -f Dockerfile ]; then
     sudo docker build --build-arg HTTP_PROXY=$HTTP_PROXY --build-arg HTTPS_PROXY=$HTTPS_PROXY -t meta-debian:1 . \
-	                  || abort "ERROR: Cannot create docker image"
-	exit 0
+                      || abort "ERROR: Cannot create docker image"
+    exit 0
 else
     echo "ERROR: Dockerfile does not exist"
     exit 1
