@@ -31,7 +31,6 @@ RUN apt-get -y install apt-utils
 RUN apt-get -y upgrade
 RUN apt-get -y install dialog
 RUN apt-get -y install sudo man lv vim-tiny screen
-RUN apt-get -y install gcc-multilib build-essential chrpath python cpio
 RUN apt-get -y install gawk wget diffstat unzip texinfo
 RUN apt-get -y install git git-core git-daemon-run
 RUN apt-get -y install openssh-server
@@ -62,9 +61,9 @@ RUN sed -i -e"s/\/debian\//\/$DEFAULT_USERNAME\//g" ../config.sh
 RUN cp ../repo-lists/src-jessie_meta-debian_all.txt \
        /home/$DEFAULT_USERNAME/repo-list/repo-meta-debian_all.txt
 RUN ./pull-repos.sh -c ../config.sh \
-    -l /home/$DEFAULT_USERNAME/repo-list/repo-meta-debian_all.txt 
+    -l /home/$DEFAULT_USERNAME/repo-list/repo-meta-debian_all.txt
 
 EXPOSE 9418
 
 USER root
-# ENTRYPOINT 
+# ENTRYPOINT
