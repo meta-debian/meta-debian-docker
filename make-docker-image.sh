@@ -29,11 +29,11 @@ while getopts "iu" OPT
 do
     case $OPT in
 	i)
-            echo "INFO    : Installing Docker" 
+            echo "INFO    : Installing Docker"
             FLAG_DOCKER_INSTALL=1
             ;;
 	u)
-            echo "INFO    : Updating Docker image" 
+            echo "INFO    : Updating Docker image"
             FLAG_UPDATE=1
             ;;
 	h)
@@ -109,8 +109,12 @@ if [ $FLAG_UPDATE -ne 0 ]; then
 	else
 	    # Update FROM section in Dockerfile-update with LATEST_TAG
     	sed -i -e "s/FROM meta-debian:.*/FROM meta-debian:$LATEST_TAG/g" ./Dockerfile-update
-        sudo docker build --build-arg HTTP_PROXY=$HTTP_PROXY --build-arg HTTPS_PROXY=$HTTPS_PROXY \
-                          -t meta-debian:$NEW_TAG -f Dockerfile-update . || abort "ERROR: Cannot update docker image"
+        if [ -z "${HTTP_PROXY}" ] || [ -z "${HTTPS_PROXY}" ]; then
+            sudo docker build -t meta-debian:$NEW_TAG -f Dockerfile-update . || abort "ERROR: Cannot update docker image"
+        else
+            sudo docker build --build-arg HTTP_PROXY=$HTTP_PROXY --build-arg HTTPS_PROXY=$HTTPS_PROXY \
+                               -t meta-debian:$NEW_TAG -f Dockerfile-update . || abort "ERROR: Cannot update docker image"
+        fi
         echo "INFO: New tag is meta-debian:$NEW_TAG"
         exit 0
     fi
@@ -118,8 +122,12 @@ fi
 
 # Build a docker container
 if [ -f Dockerfile ]; then
-    sudo docker build --build-arg HTTP_PROXY=$HTTP_PROXY --build-arg HTTPS_PROXY=$HTTPS_PROXY -t meta-debian:1 . \
-                      || abort "ERROR: Cannot create docker image"
+    if [ -z "${HTTP_PROXY}" ] || [ -z "${HTTPS_PROXY}" ]; then
+        sudo docker build -t meta-debian:1 . || abort "ERROR: Cannot create docker image"
+    else
+        sudo docker build --build-arg HTTP_PROXY=$HTTP_PROXY --build-arg HTTPS_PROXY=$HTTPS_PROXY -t meta-debian:1 . \
+                          || abort "ERROR: Cannot create docker image"
+    fi
     exit 0
 else
     echo "ERROR: Dockerfile does not exist"
