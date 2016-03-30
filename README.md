@@ -2,8 +2,8 @@
 Meta-debian-docker
 ==================
 
-Dockerfile to create a docker image which has all source repositries for bitbake of meta-debian.  
-You can reduce the time of bitbake meta-debian by using git repositries in the docker image   
+Dockerfile to create a docker image which has all source repositries for bitbake of meta-debian.
+You can reduce the time of bitbake meta-debian by using git repositries in the docker image
 instead of git repositries in https://github.com/ystk/.
 
 Create a docker image
@@ -13,16 +13,16 @@ Create a docker iamge by running below command.
 
     $ ./make-docker-image.sh
 
-If you use proxy server for making this docker image,  
-you need to set HTTP_PROXY and HTTPS_PROXY in make-docker-image.sh.  
-And don't forget proxy setting of docker command in your machine.  
+If you use proxy server for making this docker image,
+you need to set HTTP_PROXY and HTTPS_PROXY in make-docker-image.sh.
+And don't forget proxy setting of docker command in your machine.
 
 
 Run git daemon
 --------------
 
 Run git daemon with this docker image.
- 
+
     $ sudo docker run -d -p 10022:22 meta-debian:1 /etc/sv/git-daemon/run -D
 
 Then you can access to all git repositries. For example,
@@ -30,12 +30,16 @@ Then you can access to all git repositries. For example,
     $ git clone git://${IP_ADDRESS}/debian-acl.git
 
 ${IP_ADDRESS} is default address of docker image. It may be 172.17.0.2.
+If you cannot find the address, check ip address by running below command.
+
+    $ sudo docker inspect --format '{{ .NetworkSettings.IPAddress }}' ${CONTAINER ID}
+
 
 Bitbake with meta-debian-docker
 -------------------------------
 
-Please read README of https://github.com/meta-debian/meta-debian for setting meta-debian.  
-Before you run below commands,  
+Please read README of https://github.com/meta-debian/meta-debian for setting meta-debian.
+Before you run below commands,
 
     # Setup build directory
     $ export TEMPLATECONF=meta-debian/conf
@@ -47,7 +51,8 @@ you need to modify meta-debian/conf/distro/debian.conf file.
     DEBIAN_GIT_PROTOCOL ??= "https"                  ==>    DEBIAN_GIT_PROTOCOL ??= "git"
     LINUX_GIT_URI ??= "git://github.com/meta-debian" ==>    LINUX_GIT_URI ??= "git://${IP_ADDRESS}"
 
-${IP_ADDRESS} is default address of docker image. It may be 172.17.0.2.
+${IP_ADDRESS} is the address of docker image.
+
 
 Update docker image
 -------------------
