@@ -9,6 +9,7 @@ ENV DEFAULT_USERNAME debian
 ENV DEFAULT_PASSWORD debian
 ENV GIT_REPO         /home/$USERNAME/repositories
 ENV DEBIAN_MIRROR    http://ftp.jp.debian.org/debian/
+ENV DEBIAN_SECURITY  http://security.debian.org/
 
 # NOTE: The following line will create an account with EMPTY password.
 #       Please set a password if you need.
@@ -21,18 +22,20 @@ RUN mkdir -p /home/$DEFAULT_USERNAME/repositories
 ENV DEBIAN_FRONTEND noninteractive
 
 RUN echo "deb $DEBIAN_MIRROR jessie main contrib" > /etc/apt/sources.list
+RUN echo "deb $DEBIAN_SECURITY jessie/updates main contrib" >> \
+         /etc/apt/sources.list
 RUN echo "deb $DEBIAN_MIRROR jessie-updates main contrib" >> \
          /etc/apt/sources.list
 
 RUN bash -c 'if test -n "$HTTP_PROXY" ; then echo "Acquire::http::Proxy \"$HTTP_PROXY\";"; fi'
 RUN bash -c 'if test -n "$HTTP_PROXY" ; then echo "Acquire::http::Proxy \"$HTTP_PROXY\";" >> /etc/apt/apt.conf; fi'
 RUN apt-get update
-RUN apt-get -y install apt-utils
 RUN apt-get -y upgrade
+RUN apt-get -y install git git-core git-daemon-run
+#RUN apt-get -f -y install apt-utils
 RUN apt-get -y install dialog
 RUN apt-get -y install sudo man lv vim-tiny screen
-RUN apt-get -y install gawk wget diffstat unzip texinfo
-RUN apt-get -y install git git-core git-daemon-run
+RUN apt-get -y install gawk wget diffstat unzip
 RUN apt-get -y install openssh-server
 RUN apt-get -y install jq curl
 # RUN apt-get install make xsltproc docbook-utils fop dblatex xmlto
