@@ -49,7 +49,11 @@ you need to modify meta-debian/conf/distro/debian.conf file.
 
     DEBIAN_GIT_URI ??= "git://github.com/ystk"       ==>    DEBIAN_GIT_URI ??= "git://${IP_ADDRESS}"
     DEBIAN_GIT_PROTOCOL ??= "https"                  ==>    DEBIAN_GIT_PROTOCOL ??= "git"
-    LINUX_GIT_URI ??= "git://github.com/meta-debian" ==>    LINUX_GIT_URI ??= "git://${IP_ADDRESS}"
+	MISC_GIT_URI ??= "git://github.com/ystk"		 ==> 	MISC_GIT_URI ??= "git://${IP_ADDRESS}"
+	MISC_GIT_PROTOCOL ??= "https"					 ==> 	MISC_GIT_PROTOCOL ??= "git"
+    LINUX_GIT_URI ??= "git://github.com/ystk"		 ==>    LINUX_GIT_URI ??= "git://${IP_ADDRESS}"
+	LINUX_GIT_PROTOCOL ??= "https"					 ==>	LINUX_GIT_PROTOCOL ??= "git"
+    SRC_URI_ALLOWED ??= "git://github.com/ystk/"     ==>    SRC_URI_ALLOWED ??= "git://${IP_ADDRESS}"
 
 ${IP_ADDRESS} is the address of docker image.
 
