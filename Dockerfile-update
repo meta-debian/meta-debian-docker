@@ -26,7 +26,10 @@ RUN cp src-jessie_meta-debian_all.txt /home/$DEFAULT_USERNAME/repo-list/repo-met
 
 # Update git repositories
 WORKDIR /home/$DEFAULT_USERNAME/meta-debian-scripts/setup-local-gitrepo
-RUN ./pull-repos.sh -c ../config.sh -l /home/$DEFAULT_USERNAME/repo-list/repo-meta-debian_all.txt 
+RUN ./pull-repos.sh -c ../config.sh -l /home/$DEFAULT_USERNAME/repo-list/repo-meta-debian_all.txt
+
+# Set permission for git push command
+RUN chmod -R a+rw /home/$DEFAULT_USERNAME/repositories
 
 EXPOSE 9418
 
