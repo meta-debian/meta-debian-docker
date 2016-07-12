@@ -14,8 +14,8 @@ Create a docker iamge by running below command.
     $ ./make-docker-image.sh
 
 If you use proxy server for making this docker image,
-you need to set HTTP_PROXY and HTTPS_PROXY in make-docker-image.sh.
-And don't forget proxy setting of docker command in your machine.
+you need to export http_proxy and https_proxy environment values.
+And don't forget proxy setting for docker command in your machine.
 
 
 Run git daemon

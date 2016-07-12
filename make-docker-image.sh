@@ -3,8 +3,8 @@
 # Config
 FLAG_DOCKER_INSTALL=0
 FLAG_UPDATE=0
-HTTP_PROXY=""
-HTTPS_PROXY=""
+HTTP_PROXY=`printenv http_proxy`
+HTTPS_PROXY=`printenv https_proxy`
 
 usage() {
     echo "Usage: $0 [-i] [-u] [-h]"
