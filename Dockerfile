@@ -42,7 +42,7 @@ RUN apt-get -y install jq curl
 # RUN apt-get install autoconf automake libtool libglib2.0-dev
 
 # Setup git-daemon
-RUN sed -i -e"s/--base-path=\/var\/lib \/var\/lib\/git/--export-all --base-path=\/home\/$DEFAULT_USERNAME\/repositories \/home\/$DEFAULT_USERNAME\/repositories/g" \
+RUN sed -i -e"s/--base-path=\/var\/lib \/var\/lib\/git/--export-all --base-path=\/home\/$DEFAULT_USERNAME\/repositories --enable=receive-pack \/home\/$DEFAULT_USERNAME\/repositories/g" \
     /etc/sv/git-daemon/run
 
 # Add $USERNAME to sudoers file
@@ -65,6 +65,9 @@ RUN cp ../repo-lists/src-jessie_meta-debian_all.txt \
        /home/$DEFAULT_USERNAME/repo-list/repo-meta-debian_all.txt
 RUN ./pull-repos.sh -c ../config.sh \
     -l /home/$DEFAULT_USERNAME/repo-list/repo-meta-debian_all.txt
+
+# Set permission for git push command
+RUN chmod -R a+rw /home/$DEFAULT_USERNAME/repositories
 
 EXPOSE 9418
 
