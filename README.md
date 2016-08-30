@@ -45,7 +45,7 @@ Before you run below commands,
     $ export TEMPLATECONF=meta-debian/conf
     $ source ./poky/oe-init-build-env
 
-you need to modify meta-debian/conf/distro/debian.conf file.
+you need to modify meta-debian/conf/distro/deby.conf file.
 
     DEBIAN_GIT_URI ??= "git://github.com/ystk"       ==>    DEBIAN_GIT_URI ??= "git://${IP_ADDRESS}"
     DEBIAN_GIT_PROTOCOL ??= "https"                  ==>    DEBIAN_GIT_PROTOCOL ??= "git"
