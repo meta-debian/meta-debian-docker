@@ -9,7 +9,7 @@ instead of git repositries in https://github.com/ystk/.
 Create a docker image
 ---------------------
 
-Create a docker iamge by running below command.
+Create a docker image by running below command.
 
     $ ./make-docker-image.sh
 
