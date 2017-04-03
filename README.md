@@ -6,6 +6,19 @@ bitbake of Deby image. You can reduce the time for bitbake deby image
 by using git repositries in local storage instead of git repositries
 in Github.
 
+Preparation
+-----------
+
+If you want to have all source code outside the Docker image, please
+follow the following steps:
+
+    $ git clone https://github.com/meta-debian/meta-debian-scripts.git
+    $ cd meta-debian-scripts/setup-local-repos
+    $ ./pull-repos.sh -c ../config.sh -l ../repo-lists/src-deby_minimal.txt
+
+The above command will create a set of repositories on your host.
+
+
 Create a docker image
 ---------------------
 
@@ -23,7 +36,9 @@ Run git daemon
 
 Run git daemon with this docker image.
 
-    $ sudo docker run -d -p 10022:22 deby:1 /etc/sv/git-daemon/run -D
+    $ docker run -d -p 10022:22 -v /home/debian/repositories:/home/debian/repositories deby:1 /etc/sv/git-daemon/run -D
+ or
+    $ docker run -d -p 10022:22 deby:1 /etc/sv/git-daemon/run -D
 
 Then you can access to all git repositries. For example,
 
@@ -59,8 +74,8 @@ you need to modify meta-debian/conf/distro/deby.conf file.
 ${IP_ADDRESS} is the address of docker image.
 
 
-Update docker image
--------------------
+Update repositories from docker image (Not working at the moment)
+-----------------------------------------------------------------
 
 After you created docker image at once, git repositroies in https://github.com/ystk may be updated.
 
@@ -72,20 +87,22 @@ So please update git repositories in your docker image by following command.
 
 Then, you can find new tag number in the console.
 
-    $ INFO: New tag is meta-debian:$NEW_TAG
+    $ INFO: New tag is deby:$NEW_TAG
 
 $NEW_TAG is the latest tag number of meta-debian-docker.
 
 Finally, you can run git daemon with the latest docker image and bitbake will succeed.
 
-    $ sudo docker run -d -p 10022:22 meta-debian:$NEW_TAG /etc/sv/git-daemon/run -D
+    $ sudo docker run -d -p 10022:22 deby:$NEW_TAG /etc/sv/git-daemon/run -D
 
 Login docker image
 ------------------
 
 If you'd like to check something in docker image, you can login the docker image by running sshd.
 
-    $ sudo docker run -d -p 10022:22 meta-debian:1 /usr/sbin/sshd -D
+    $ sudo docker run -d -p 10022:22 -v /home/debian/repositories:/home/debian/repositories deby:1 /usr/sbin/sshd -D
+ or 
+    $ sudo docker run -d -p 10022:22 deby:1 /usr/sbin/sshd -D
 
 then
 
