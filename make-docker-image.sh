@@ -15,7 +15,7 @@ usage() {
 }
 
 get_latest_tag() {
-    local TAG=`sudo docker images | grep meta-debian | sed 's/[\t ]\+/\t/g' | cut -f2 | head -1 | tail -1`
+    local TAG=`sudo docker images | grep deby | sed 's/[\t ]\+/\t/g' | cut -f2 | head -1 | tail -1`
 	return $TAG
 }
 
@@ -94,7 +94,7 @@ if [ ! `which docker` ]; then
     exit 1
 fi
 
-# Update currrent meta-debian docker image
+# Update currrent deby docker image
 if [ $FLAG_UPDATE -ne 0 ]; then
     if [ ! -f Dockerfile-update ]; then
         echo "ERROR: Dockerfile-update does not exist"
@@ -108,14 +108,14 @@ if [ $FLAG_UPDATE -ne 0 ]; then
         exit 1
 	else
 	    # Update FROM section in Dockerfile-update with LATEST_TAG
-    	sed -i -e "s/FROM meta-debian:.*/FROM meta-debian:$LATEST_TAG/g" ./Dockerfile-update
+    	sed -i -e "s/FROM deby:.*/FROM deby:$LATEST_TAG/g" ./Dockerfile-update
         if [ -z "${HTTP_PROXY}" ] || [ -z "${HTTPS_PROXY}" ]; then
-            sudo docker build -t meta-debian:$NEW_TAG -f Dockerfile-update . || abort "ERROR: Cannot update docker image"
+            sudo docker build -t deby:$NEW_TAG -f Dockerfile-update . || abort "ERROR: Cannot update docker image"
         else
             sudo docker build --build-arg HTTP_PROXY=$HTTP_PROXY --build-arg HTTPS_PROXY=$HTTPS_PROXY \
-                               -t meta-debian:$NEW_TAG -f Dockerfile-update . || abort "ERROR: Cannot update docker image"
+                               -t deby:$NEW_TAG -f Dockerfile-update . || abort "ERROR: Cannot update docker image"
         fi
-        echo "INFO: New tag is meta-debian:$NEW_TAG"
+        echo "INFO: New tag is deby:$NEW_TAG"
         exit 0
     fi
 fi
@@ -123,9 +123,9 @@ fi
 # Build a docker container
 if [ -f Dockerfile ]; then
     if [ -z "${HTTP_PROXY}" ] || [ -z "${HTTPS_PROXY}" ]; then
-        sudo docker build -t meta-debian:1 . || abort "ERROR: Cannot create docker image"
+        sudo docker build -t deby:1 . || abort "ERROR: Cannot create docker image"
     else
-        sudo docker build --build-arg HTTP_PROXY=$HTTP_PROXY --build-arg HTTPS_PROXY=$HTTPS_PROXY -t meta-debian:1 . \
+        sudo docker build --build-arg HTTP_PROXY=$HTTP_PROXY --build-arg HTTPS_PROXY=$HTTPS_PROXY -t deby:1 . \
                           || abort "ERROR: Cannot create docker image"
     fi
     exit 0
@@ -137,4 +137,4 @@ fi
 # CONTAINER_ID=`sudo docker ps -l -q`
 
 # Commit it
-# sudo docker commit $CONTAINER_ID meta-debian:1
+# sudo docker commit $CONTAINER_ID deby:1

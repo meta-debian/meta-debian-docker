@@ -1,13 +1,13 @@
-#
+# 
 # Build git-daemon server for meta-debian build environment
 #
-FROM meta-debian:1
+FROM deby:1
 MAINTAINER KOBAYASHI Yoshitake
 
 # Please change the follows
 ENV DEFAULT_USERNAME debian
 ENV DEFAULT_PASSWORD debian
-ENV GIT_REPO         /home/$USERNAME/repositories
+ENV GIT_REPO         /home/$DEFAULT_USERNAME/repositories
 ENV DEBIAN_MIRROR    http://ftp.jp.debian.org/debian/
 
 # Might be do not need to edit from here
@@ -21,12 +21,12 @@ RUN git pull
 
 # Cretae new list
 WORKDIR /home/$DEFAULT_USERNAME/meta-debian-scripts/repo-lists
-RUN ./generate_src-jessie_meta-debian_all.sh
-RUN cp src-jessie_meta-debian_all.txt /home/$DEFAULT_USERNAME/repo-list/repo-meta-debian_all.txt
+RUN ./generate_src-deby_all.sh
+RUN cp src-deby_all.txt /home/$DEFAULT_USERNAME/repo-list/repo-deby_all.txt
 
 # Update git repositories
 WORKDIR /home/$DEFAULT_USERNAME/meta-debian-scripts/setup-local-gitrepo
-RUN ./pull-repos.sh -c ../config.sh -l /home/$DEFAULT_USERNAME/repo-list/repo-meta-debian_all.txt
+RUN ./pull-repos.sh -c ../config.sh -l /home/$DEFAULT_USERNAME/repo-list/repo-deby_all.txt
 
 # Set permission for git push command
 RUN chmod -R a+rw /home/$DEFAULT_USERNAME/repositories
