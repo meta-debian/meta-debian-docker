@@ -25,8 +25,6 @@ ENV DEBIAN_FRONTEND noninteractive
 RUN echo "deb $DEBIAN_MIRROR jessie main contrib" > /etc/apt/sources.list
 RUN echo "deb $DEBIAN_SECURITY jessie/updates main contrib" >> \
          /etc/apt/sources.list
-RUN echo "deb $DEBIAN_MIRROR jessie-updates main contrib" >> \
-         /etc/apt/sources.list
 
 RUN bash -c 'if test -n "$HTTP_PROXY" ; then echo "Acquire::http::Proxy \"$HTTP_PROXY\";"; fi'
 RUN bash -c 'if test -n "$HTTP_PROXY" ; then echo "Acquire::http::Proxy \"$HTTP_PROXY\";" >> /etc/apt/apt.conf; fi'
