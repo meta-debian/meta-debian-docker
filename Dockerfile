@@ -40,6 +40,10 @@ RUN apt-get -y install gawk wget diffstat unzip
 RUN apt-get -y install openssh-server
 RUN apt-get -y install jq curl
 RUN apt-get -y install texinfo gcc-multilib build-essential chrpath socat libsdl1.2-dev xterm
+RUN apt-get -y install python3 cpio locales
+RUN sed --in-place '/en_US.UTF-8/s/^# //' /etc/locale.gen
+RUN locale-gen
+ENV LANG en_US.UTF-8
 
 #
 # Setup git-daemon
