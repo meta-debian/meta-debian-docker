@@ -37,7 +37,9 @@ Run git daemon
 Run git daemon with this docker image.
 
     $ docker run -d -p 10022:22 -v /home/debian/repositories:/home/debian/repositories deby:1 /etc/sv/git-daemon/run -D
- or
+
+or
+
     $ docker run -d -p 10022:22 deby:1 /etc/sv/git-daemon/run -D
 
 Then you can access to all git repositries. For example,
@@ -101,7 +103,9 @@ Login docker image
 If you'd like to check something in docker image, you can login the docker image by running sshd.
 
     $ sudo docker run -d -p 10022:22 -v /home/debian/repositories:/home/debian/repositories deby:1 /usr/sbin/sshd -D
- or 
+
+or
+
     $ sudo docker run -d -p 10022:22 deby:1 /usr/sbin/sshd -D
 
 then
